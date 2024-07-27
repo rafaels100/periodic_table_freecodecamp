@@ -40,7 +40,7 @@ INSERT INTO types(type) VALUES ('nonmetal'), ('metal'), ('metalloid');
 
 --ALTER TABLE properties ADD FOREIGN KEY(type_id) REFERENCES types(type_id);
 
-SELECT A.type_id FROM types AS A RIGHT JOIN properties AS B USING(type);
+--SELECT A.type_id FROM types AS A RIGHT JOIN properties AS B USING(type);
 /*
 UPDATE properties AS A
 SET type_id = B.type_id
@@ -49,3 +49,46 @@ WHERE A.type = B.type;
 */
 SELECT * FROM types;
 SELECT * FROM properties;
+SELECT * FROM elements;
+
+--Chequeo que no pueda insertar nulls en la columna de types, pues la foreign key no permite nulls
+--INSERT INTO properties(atomic_number, type, atomic_mass, melting_point_celsius, boiling_point_celsius, type_id) 
+--VALUES (10, 'nonmetal', 1, 1, 1, NULL)
+
+--Necesito un nuevo elemento en la tabla elements para hacer esta prueba..
+--INSERT INTO elements(atomic_number, symbol, name) VALUES (9, 'D', 'Locatio');
+
+--INSERT INTO properties(atomic_number, type, atomic_mass, melting_point_celsius, boiling_point_celsius, type_id) 
+--VALUES (9, 'nonmetal', 1, 1, 1, NULL);
+/*
+SELECT * FROM properties;
+--Well waddayaknow... si me deja insertar NULLS, aunque la foreign key restriction no acepte NULLS.
+--Entonces, debo forzar esa restraint en esta columna tambien
+DELETE FROM properties WHERE atomic_number=9 OR atomic_number=10;
+ALTER TABLE properties ALTER COLUMN type_id SET NOT NULL;
+
+--Repito la prueba y no deberia ser capaz ahora de lograrlo
+--Necesito un nuevo elemento en la tabla elements para hacer esta prueba..
+INSERT INTO elements(atomic_number, symbol, name) VALUES (10, 'Di', 'Locatioi');
+
+INSERT INTO properties(atomic_number, type, atomic_mass, melting_point_celsius, boiling_point_celsius, type_id) 
+VALUES (10, 'nonmetal', 1, 1, 1, NULL);
+
+UPDATE elements
+	SET symbol = INITCAP(symbol);
+	
+-- INITCAP no nos sirve, pues si bien pone en mayuscula la primera letra, tambien pone en minuscula a los que estan a derecha, no los deja como estan.
+*/
+
+--UPDATE elements
+--	SET symbol = REGEXP_REPLACE(symbol, '(^[A-Z])', E'\\l\\1')
+	
+-- Tristemente REGEXP_REPLACE no tiene una built-in function para reemplazar los caracteres que encontro con regex por su version mayuscula.
+-- Malisimo.
+
+UPDATE elements
+	SET symbol = UPPER(LEFT(symbol, 1)) || RIGHT(symbol, -1);
+
+--Un hack es usar string slicing y concatenacion: Con LEFTA elegimos la primera letra y la hacemos mayuscula con UPPER. Con RIGHT, en vez de
+-- empezar desde la derecha, empezamos desde la izquierda -1 y capturamos todo a derecha, y lo dejamos como esta, pues no tenemos que 
+-- poner en minuscula lo que sea que viene despues de la primera letra. Con || concatenamos las strings.
