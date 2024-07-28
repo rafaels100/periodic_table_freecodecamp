@@ -1,0 +1,5 @@
+Para dumpear:
+pg_dump -cC --inserts -h 127.0.0.1 -U root -W periodic_table > periodic_table_db_P2.sql
+
+Para recuperar:
+psql -U root --dbname=postgres -h 127.0.0.1 -W < periodic_table_db_P2.sql

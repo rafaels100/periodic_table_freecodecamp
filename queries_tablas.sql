@@ -47,9 +47,9 @@ SET type_id = B.type_id
 FROM types AS B
 WHERE A.type = B.type;
 */
-SELECT * FROM types;
-SELECT * FROM properties;
-SELECT * FROM elements;
+--SELECT * FROM types;
+--SELECT * FROM properties;
+--SELECT * FROM elements;
 
 --Chequeo que no pueda insertar nulls en la columna de types, pues la foreign key no permite nulls
 --INSERT INTO properties(atomic_number, type, atomic_mass, melting_point_celsius, boiling_point_celsius, type_id) 
@@ -86,9 +86,22 @@ UPDATE elements
 -- Tristemente REGEXP_REPLACE no tiene una built-in function para reemplazar los caracteres que encontro con regex por su version mayuscula.
 -- Malisimo.
 
-UPDATE elements
-	SET symbol = UPPER(LEFT(symbol, 1)) || RIGHT(symbol, -1);
+
+--UPDATE elements
+	--SET symbol = UPPER(LEFT(symbol, 1)) || RIGHT(symbol, -1);
 
 --Un hack es usar string slicing y concatenacion: Con LEFTA elegimos la primera letra y la hacemos mayuscula con UPPER. Con RIGHT, en vez de
 -- empezar desde la derecha, empezamos desde la izquierda -1 y capturamos todo a derecha, y lo dejamos como esta, pues no tenemos que 
 -- poner en minuscula lo que sea que viene despues de la primera letra. Con || concatenamos las strings.
+
+--You should remove all the trailing zeros after the decimals from each row of the atomic_mass column. You may need to adjust a data type to DECIMAL for this. The final values they should be are in the atomic_mass.txt file
+--14- Remover todos los ceros
+--ALTER TABLE properties ALTER COLUMN atomic_mass TYPE DECIMAL(8, 2);
+
+UPDATE copia_properties
+	SET atomic_mass = ROUND(atomic_mass, 3)
+WHERE atomic_number = 8;
+
+SELECT * FROM copia_properties;
+
+
