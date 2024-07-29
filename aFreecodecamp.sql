@@ -56,3 +56,21 @@ UPDATE elements
 --Un hack es usar string slicing y concatenacion: Con LEFTA elegimos la primera letra y la hacemos mayuscula con UPPER. Con RIGHT, en vez de
 -- empezar desde la derecha, empezamos desde la izquierda -1 y capturamos todo a derecha, y lo dejamos como esta, pues no tenemos que 
 -- poner en minuscula lo que sea que viene despues de la primera letra. Con || concatenamos las strings.
+
+--14- Remover todos los ceros
+--You should remove all the trailing zeros after the decimals from each row of the atomic_mass column. You may need to adjust a data type to DECIMAL for this. The final values they should be are in the atomic_mass.txt file
+
+ALTER TABLE properties ALTER COLUMN atomic_mass TYPE REAL;
+ALTER TABLE properties ALTER COLUMN atomic_mass TYPE DECIMAL;
+
+--La idea es pasarlos a REAL, lo que nos deja con el numero hasta la ultima cifra significativa, quita los ceros de mas. Luego lo pasamos a DECIMAL
+--porque el tutorial lo recomienda y tal vez tengan un Test para eso
+
+
+--15 y 16- añadir el Fluorine al database y el Neon
+--You should add the element with atomic number 9 to your database. Its name is Fluorine, symbol is F, mass is 18.998, melting point is -220, boiling point is -188.1, and it's a nonmetal
+INSERT INTO elements(atomic_number, symbol, name) VALUES (9, 'F', 'Fluorine'), (10, 'Ne', 'Neon');
+
+INSERT INTO properties(atomic_number, type, atomic_mass, melting_point_celsius, boiling_point_celsius, type_id)
+VALUES (9, 'nonmetal', 18.998, -220, -188.1, 1), (10, 'nonmetal', 20.18, -248.6, -246.1, 1);
+

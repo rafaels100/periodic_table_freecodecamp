@@ -98,10 +98,15 @@ UPDATE elements
 --14- Remover todos los ceros
 --ALTER TABLE properties ALTER COLUMN atomic_mass TYPE DECIMAL(8, 2);
 
-UPDATE copia_properties
-	SET atomic_mass = ROUND(atomic_mass, 3)
-WHERE atomic_number = 8;
+--ALTER TABLE properties ALTER COLUMN atomic_mass TYPE REAL;
+--ALTER TABLE properties ALTER COLUMN atomic_mass TYPE DECIMAL;
+--SELECT * FROM properties;
 
-SELECT * FROM copia_properties;
+--You should add the element with atomic number 9 to your database. Its name is Fluorine, symbol is F, mass is 18.998, melting point is -220, boiling point is -188.1, and it's a nonmetal
 
+--15 y 16- añadir el Fluorine al database y el Neon
+INSERT INTO elements(atomic_number, symbol, name) VALUES (9, 'F', 'Fluorine'), (10, 'Ne', 'Neon');
+
+INSERT INTO properties(atomic_number, type, atomic_mass, melting_point_celsius, boiling_point_celsius, type_id)
+VALUES (9, 'nonmetal', 18.998, -220, -188.1, 1), (10, 'nonmetal', 20.18, -248.6, -246.1, 1);
 
